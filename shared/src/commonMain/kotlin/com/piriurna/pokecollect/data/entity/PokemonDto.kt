@@ -1,10 +1,10 @@
-package com.piriurna.pokecollect.entity
+package com.piriurna.pokecollect.data.entity
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Pokemon(
+data class PokemonDto(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
@@ -13,6 +13,4 @@ data class Pokemon(
     val imageUrl: String,
     @SerialName("kind")
     val kind: String,
-    @SerialName("power")
-    val power: Long
 )

@@ -1,7 +1,9 @@
-package com.piriurna.pokecollect.database
+package com.piriurna.pokecollect.data.database
 
 import com.piriurna.pokecollect.cache.AppDatabase
-import com.piriurna.pokecollect.entity.Pokemon
+import com.piriurna.pokecollect.data.entity.PokemonDto
+import com.piriurna.pokecollect.data.network.models.PokemonResponse
+import com.piriurna.pokecollect.domain.mappers.toDto
 
 internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
@@ -14,24 +16,23 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         }
     }
 
-    internal fun getAllPokemons(): List<Pokemon> {
+    internal fun getAllPokemons(): List<PokemonDto> {
         return dbQuery.selectAllPokemon(::mapPokemonSelecting).executeAsList()
     }
 
-    internal fun createPokemons(pokemons: List<Pokemon>) {
+    internal fun createPokemons(pokemons: List<PokemonResponse>) {
         dbQuery.transaction {
             pokemons.forEach { launch ->
-                insertPokemon(launch)
+                insertPokemon(launch.toDto())
             }
         }
     }
 
-    private fun insertPokemon(pokemon: Pokemon) {
+    private fun insertPokemon(pokemon: PokemonDto) {
         dbQuery.insertPokemon(
             name = pokemon.name,
             imageUrl = pokemon.imageUrl,
             kind = pokemon.kind,
-            power = pokemon.power
         )
     }
 
@@ -39,15 +40,13 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         id: Long,
         name: String,
         imageUrl: String,
-        kind: String,
-        power: Long
-    ): Pokemon {
-        return Pokemon(
+        kind: String
+    ): PokemonDto {
+        return PokemonDto(
             id = id,
             name = name,
             imageUrl = imageUrl,
-            kind = kind,
-            power = power
+            kind = kind
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.piriurna.pokecollect.database
+package com.piriurna.pokecollect.data.database
 
 import app.cash.sqldelight.db.SqlDriver
 
