@@ -1,0 +1,19 @@
+CREATE TABLE Pokemon(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    imageUrl TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    power INTEGER NOT NULL
+);
+
+
+insertPokemon:
+INSERT INTO Pokemon(name, imageUrl, kind, power)
+VALUES (?, ?, ?, ?);
+
+removeAllPokemons:
+DELETE FROM Pokemon;
+
+selectAllPokemon:
+SELECT Pokemon.*
+FROM Pokemon;
