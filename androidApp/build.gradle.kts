@@ -47,6 +47,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation.runtime.ktx)
     debugImplementation(libs.compose.ui.tooling)
+
     implementation(libs.coil)
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 }

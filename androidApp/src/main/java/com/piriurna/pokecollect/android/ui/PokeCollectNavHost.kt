@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.piriurna.pokecollect.android.ui.pokemondisplay.PokemonDisplayScreen
-import com.piriurna.pokecollect.android.ui.pokemondisplay.PokemonDisplayViewModel
+import com.piriurna.pokecollect.android.pokemondisplay.PokemonDisplayScreen
+import com.piriurna.pokecollect.android.pokemondisplay.PokemonDisplayViewModel
 
 @Composable
 fun PokeCollectNavHost(
