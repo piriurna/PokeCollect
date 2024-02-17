@@ -1,7 +1,11 @@
 package com.piriurna.pokecollect.data.database
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.piriurna.pokecollect.cache.AppDatabase
 import com.piriurna.pokecollect.data.entity.PokemonDto
+import kotlinx.coroutines.flow.Flow
+import kotlin.coroutines.CoroutineContext
 
 internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
@@ -24,6 +28,10 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
 
     internal fun getAllUnseenPokemons(): List<PokemonDto> {
         return dbQuery.selectAllUnseenPokemon(::mapPokemonSelecting).executeAsList()
+    }
+
+    internal fun getAllOwnedPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
+        return dbQuery.selectOwnedPokemon(::mapPokemonSelecting).asFlow().mapToList(coroutineContext)
     }
 
     internal fun getUnseenPokemonsCount(): Int {
@@ -49,7 +57,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
                 name = name,
                 imageUrl = imageUrl,
                 kind = kind,
-                seen = seen.toLong()
+                seen = seen.toLong(),
+                owned = owned.toLong()
             )
         }
     }
@@ -59,7 +68,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
             name = pokemon.name,
             imageUrl = pokemon.imageUrl,
             kind = pokemon.kind,
-            seen = 0
+            seen = 0,
+            owned = 0
         )
     }
 
@@ -68,14 +78,16 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         name: String,
         imageUrl: String,
         kind: String,
-        seen: Long
+        seen: Long,
+        owned: Long
     ): PokemonDto {
         return PokemonDto(
             id = id,
             name = name,
             imageUrl = imageUrl,
             kind = kind,
-            seen = seen.toInt()
+            seen = seen.toInt(),
+            owned = owned.toInt()
         )
     }
 }

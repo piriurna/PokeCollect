@@ -3,13 +3,14 @@ CREATE TABLE Pokemon(
     name TEXT NOT NULL,
     imageUrl TEXT NOT NULL,
     kind TEXT NOT NULL,
-    seen INTEGER NOT NULL
+    seen INTEGER NOT NULL,
+    owned INTEGER NOT NULL DEFAULT 0
 );
 
 
 insertPokemon:
-INSERT INTO Pokemon(name, imageUrl, kind, seen)
-VALUES (?, ?, ?, ?);
+INSERT INTO Pokemon(name, imageUrl, kind, seen, owned)
+VALUES (?, ?, ?, ?, ?);
 
 removeAllPokemons:
 DELETE FROM Pokemon;
@@ -37,6 +38,11 @@ SELECT Pokemon.*
 FROM Pokemon
 WHERE id = ?;
 
+selectOwnedPokemon:
+SELECT Pokemon.*
+FROM Pokemon
+WHERE owned = 1;
+
 updatePokemon:
-INSERT OR REPLACE INTO Pokemon(id, name, imageUrl, kind, seen)
-VALUES (?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO Pokemon(id, name, imageUrl, kind, seen, owned)
+VALUES (?, ?, ?, ?, ?, ?);

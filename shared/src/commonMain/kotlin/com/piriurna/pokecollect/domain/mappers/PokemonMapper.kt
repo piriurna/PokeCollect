@@ -10,16 +10,29 @@ fun PokemonDto.toDomain(): Pokemon {
         name = name,
         type = kind,
         imageUrl = imageUrl,
-        seen = seen == 1
+        seen = seen == 1,
+        owned = owned == 1
     )
 }
 
 fun PokemonResponse.toDto(): PokemonDto {
     return PokemonDto(
-        id = 0,
+        id = id,
         name = name,
         imageUrl = sprites.frontDefault?:"",
         kind = types.firstOrNull()?.type?.name?:"",
-        seen = 0
+        seen = 0,
+        owned = 0
+    )
+}
+
+fun Pokemon.toDto(): PokemonDto {
+    return PokemonDto(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
+        kind = type,
+        seen = if(seen) 1 else 0,
+        owned = if (owned) 1 else 0
     )
 }

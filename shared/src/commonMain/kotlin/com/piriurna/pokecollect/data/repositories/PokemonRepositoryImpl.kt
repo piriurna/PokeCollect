@@ -4,6 +4,8 @@ import com.piriurna.pokecollect.PokemonSDK
 import com.piriurna.pokecollect.data.entity.PokemonDto
 import com.piriurna.pokecollect.data.network.models.PokemonResponse
 import com.piriurna.pokecollect.domain.repositories.PokemonRepository
+import kotlinx.coroutines.flow.Flow
+import kotlin.coroutines.CoroutineContext
 
 class PokemonRepositoryImpl constructor(
     private val pokemonSDK: PokemonSDK
@@ -15,6 +17,10 @@ class PokemonRepositoryImpl constructor(
 
     override suspend fun getStoredPokemons(): List<PokemonDto> {
         return pokemonSDK.getStoredPokemons()
+    }
+
+    override suspend fun getOwnedPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
+        return pokemonSDK.getOwnedPokemons(coroutineContext)
     }
 
     override suspend fun getPokemon(id: Long): PokemonDto? {
@@ -38,5 +44,9 @@ class PokemonRepositoryImpl constructor(
         pokemonToUpdate?.let {
             pokemonSDK.updatePokemon(it)
         }
+    }
+
+    override suspend fun catchPokemon(pokemon: PokemonDto) {
+        pokemonSDK.updatePokemon(pokemon.copy(owned = 1, seen = 1))
     }
 }

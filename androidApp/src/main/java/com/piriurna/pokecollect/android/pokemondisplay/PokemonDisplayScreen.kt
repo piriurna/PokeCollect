@@ -1,14 +1,18 @@
 package com.piriurna.pokecollect.android.pokemondisplay
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.piriurna.pokecollect.android.MyApplicationTheme
+import com.piriurna.pokecollect.android.pokedex.ui.components.PokedexItem
 import com.piriurna.pokecollect.domain.models.Pokemon
 
 @Composable
@@ -28,48 +33,41 @@ fun PokemonDisplayScreen(
 ) {
     val uiState = viewModel.uiState.value
     LaunchedEffect(Unit) {
+        viewModel.setup()
         viewModel.getNextPokemon()
     }
 
-    PokemonDisplayScreenContent(modifier, uiState, viewModel::getNextPokemon)
+    PokemonDisplayScreenContent(modifier, uiState, viewModel::getNextPokemon, viewModel::catchPokemon)
 }
 
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PokemonDisplayScreenContent(
     modifier: Modifier = Modifier,
     uiState: PokemonDisplayUiState,
-    onNextPokemonLoadClicked: () -> Unit = {}
+    onNextPokemonLoadClicked: () -> Unit = {},
+    onCatchPokemonPressed: (Pokemon) -> Unit = {}
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier.fillMaxSize()
     ) {
+        PokemonEncounterContainer(
+            modifier = Modifier
+                .fillMaxHeight(0.6f)
+                .fillMaxWidth(),
+            pokemon = uiState.currentPokemon,
+            onNextPokemonLoadClicked = onNextPokemonLoadClicked,
+            onCatchPokemonPressed = onCatchPokemonPressed,
+            isLoading = uiState.isLoading
+        )
 
-        when {
-            uiState.isLoading -> {
-                Text(text = "Finding your next Pokemon...")
-            }
-            else -> {
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    PokemonEncounterContainer(
-                        modifier = Modifier.weight(1.5f),
-                        uiState = uiState,
-                        onNextPokemonLoadClicked = onNextPokemonLoadClicked
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(Color.Red)
-                            .fillMaxSize()
-                    ) {
-
-                    }
-                }
-            }
+        HorizontalPager(
+            modifier = Modifier
+                .fillMaxSize(),
+            state = rememberPagerState { uiState.ownedPokemonList.size }
+        ) {
+            PokedexItem(modifier = Modifier.weight(1f), pokemon = uiState.ownedPokemonList[it])
         }
     }
 }
@@ -77,27 +75,45 @@ private fun PokemonDisplayScreenContent(
 @Composable
 private fun PokemonEncounterContainer(
     modifier: Modifier = Modifier,
-    uiState: PokemonDisplayUiState,
-    onNextPokemonLoadClicked: () -> Unit
+    pokemon: Pokemon?,
+    onNextPokemonLoadClicked: () -> Unit,
+    onCatchPokemonPressed: (Pokemon) -> Unit,
+    isLoading: Boolean
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        uiState.currentPokemon?.imageUrl?.let {
-            AsyncImage(
-                modifier = Modifier.size(120.dp),
-                model = uiState.currentPokemon.imageUrl,
-                contentDescription = "${uiState.currentPokemon.name} image"
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = uiState.currentPokemon.name)
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+        when {
+            isLoading -> {
+                Text(text = "Finding your next Pokemon...")
+            }
+            else -> {
+                pokemon?.let {
+                    AsyncImage(
+                        modifier = Modifier.size(120.dp),
+                        model = it.imageUrl,
+                        contentDescription = "${it.name} image"
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = it.name)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-        Button(onClick = onNextPokemonLoadClicked) {
-            Text(text = "Load Next")
+                Button(onClick = onNextPokemonLoadClicked) {
+                    Text(text = "Load Next")
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = { pokemon?.let { onCatchPokemonPressed(pokemon) } },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) {
+                    Text(text = "Catch it")
+                }
+            }
         }
     }
 }
@@ -114,7 +130,8 @@ private fun PokemonDisplayScreenPreview() {
                     name = "aa",
                     seen = false,
                     imageUrl = "",
-                    type = ""
+                    type = "",
+                    owned = false
                 )
             )
         )

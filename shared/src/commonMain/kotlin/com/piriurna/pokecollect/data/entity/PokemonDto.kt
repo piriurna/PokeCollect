@@ -14,5 +14,7 @@ data class PokemonDto(
     @SerialName("kind")
     val kind: String,
     @SerialName("seen")
-    val seen: Int
+    val seen: Int,
+    @SerialName("owned")
+    val owned: Int
 )

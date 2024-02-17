@@ -5,6 +5,8 @@ import com.piriurna.pokecollect.data.database.DatabaseDriverFactory
 import com.piriurna.pokecollect.data.entity.PokemonDto
 import com.piriurna.pokecollect.data.network.PokemonApi
 import com.piriurna.pokecollect.data.network.models.PokemonResponse
+import kotlinx.coroutines.flow.Flow
+import kotlin.coroutines.CoroutineContext
 
 class PokemonSDK(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = Database(databaseDriverFactory)
@@ -38,6 +40,11 @@ class PokemonSDK(databaseDriverFactory: DatabaseDriverFactory) {
     @Throws(Exception::class)
     fun getUnseenPokemonsCount(): Int {
         return database.getUnseenPokemonsCount()
+    }
+
+    @Throws(Exception::class)
+    fun getOwnedPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
+        return database.getAllOwnedPokemons(coroutineContext)
     }
 
     @Throws(Exception::class)

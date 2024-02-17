@@ -13,7 +13,7 @@ class PokeCollectApplication: Application() {
     private val androidModule = module {
         single<DatabaseDriverFactory> { DatabaseDriverFactory(get()) }
 
-        viewModel { PokemonDisplayViewModel(get(), get()) }
+        viewModel { PokemonDisplayViewModel(get(), get(), get(), get()) }
     }
 
     override fun onCreate() {
