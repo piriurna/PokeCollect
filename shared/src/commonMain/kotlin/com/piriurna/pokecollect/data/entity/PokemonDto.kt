@@ -13,4 +13,6 @@ data class PokemonDto(
     val imageUrl: String,
     @SerialName("kind")
     val kind: String,
+    @SerialName("seen")
+    val seen: Int
 )

@@ -20,9 +20,9 @@ class PokemonApi {
         }
     }
 
-    suspend fun getAllPokemonUrlList(): PokeApiResponse<PokemonListItemResponse> {
+    suspend fun getAllPokemonUrlList(offset: Int): PokeApiResponse<PokemonListItemResponse> {
         return httpClient
-            .get("https://pokeapi.co/api/v2/pokemon/")
+            .get("https://pokeapi.co/api/v2/pokemon/?limit=20&offset=$offset")
             .body()
     }
 

@@ -2,8 +2,6 @@ package com.piriurna.pokecollect.data.database
 
 import com.piriurna.pokecollect.cache.AppDatabase
 import com.piriurna.pokecollect.data.entity.PokemonDto
-import com.piriurna.pokecollect.data.network.models.PokemonResponse
-import com.piriurna.pokecollect.domain.mappers.toDto
 
 internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
@@ -20,11 +18,39 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         return dbQuery.selectAllPokemon(::mapPokemonSelecting).executeAsList()
     }
 
-    internal fun createPokemons(pokemons: List<PokemonResponse>) {
+    internal fun getPokemonsCount(): Int {
+        return dbQuery.pokemonCount().executeAsOne().toInt()
+    }
+
+    internal fun getAllUnseenPokemons(): List<PokemonDto> {
+        return dbQuery.selectAllUnseenPokemon(::mapPokemonSelecting).executeAsList()
+    }
+
+    internal fun getUnseenPokemonsCount(): Int {
+        return dbQuery.unseenPokemonCount().executeAsOneOrNull()?.toInt()?:0
+    }
+
+    internal fun getPokemon(id: Long): PokemonDto? {
+        return dbQuery.selectPokemon(id, ::mapPokemonSelecting).executeAsOneOrNull()
+    }
+
+    internal fun createPokemons(pokemons: List<PokemonDto>) {
         dbQuery.transaction {
             pokemons.forEach { launch ->
-                insertPokemon(launch.toDto())
+                insertPokemon(launch)
             }
+        }
+    }
+
+    internal fun updatePokemon(pokemon: PokemonDto) {
+        with(pokemon) {
+            dbQuery.updatePokemon(
+                id = id,
+                name = name,
+                imageUrl = imageUrl,
+                kind = kind,
+                seen = seen.toLong()
+            )
         }
     }
 
@@ -33,6 +59,7 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
             name = pokemon.name,
             imageUrl = pokemon.imageUrl,
             kind = pokemon.kind,
+            seen = 0
         )
     }
 
@@ -40,13 +67,15 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         id: Long,
         name: String,
         imageUrl: String,
-        kind: String
+        kind: String,
+        seen: Long
     ): PokemonDto {
         return PokemonDto(
             id = id,
             name = name,
             imageUrl = imageUrl,
-            kind = kind
+            kind = kind,
+            seen = seen.toInt()
         )
     }
 }

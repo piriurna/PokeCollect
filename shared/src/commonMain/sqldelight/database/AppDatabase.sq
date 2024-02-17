@@ -2,17 +2,41 @@ CREATE TABLE Pokemon(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     imageUrl TEXT NOT NULL,
-    kind TEXT NOT NULL
+    kind TEXT NOT NULL,
+    seen INTEGER NOT NULL
 );
 
 
 insertPokemon:
-INSERT INTO Pokemon(name, imageUrl, kind)
-VALUES (?, ?, ?);
+INSERT INTO Pokemon(name, imageUrl, kind, seen)
+VALUES (?, ?, ?, ?);
 
 removeAllPokemons:
 DELETE FROM Pokemon;
 
+pokemonCount:
+SELECT COUNT(*)
+FROM Pokemon;
+
 selectAllPokemon:
 SELECT Pokemon.*
 FROM Pokemon;
+
+selectAllUnseenPokemon:
+SELECT Pokemon.*
+FROM Pokemon
+WHERE seen = 0;
+
+unseenPokemonCount:
+SELECT COUNT(*)
+FROM Pokemon
+WHERE seen = 0;
+
+selectPokemon:
+SELECT Pokemon.*
+FROM Pokemon
+WHERE id = ?;
+
+updatePokemon:
+INSERT OR REPLACE INTO Pokemon(id, name, imageUrl, kind, seen)
+VALUES (?, ?, ?, ?, ?);

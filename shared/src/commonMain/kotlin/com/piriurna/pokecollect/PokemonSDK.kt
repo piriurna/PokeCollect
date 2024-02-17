@@ -2,31 +2,56 @@ package com.piriurna.pokecollect
 
 import com.piriurna.pokecollect.data.database.Database
 import com.piriurna.pokecollect.data.database.DatabaseDriverFactory
+import com.piriurna.pokecollect.data.entity.PokemonDto
 import com.piriurna.pokecollect.data.network.PokemonApi
-import com.piriurna.pokecollect.domain.mappers.toDomain
-import com.piriurna.pokecollect.domain.models.Pokemon
+import com.piriurna.pokecollect.data.network.models.PokemonResponse
 
 class PokemonSDK(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = Database(databaseDriverFactory)
     private val api = PokemonApi()
 
     @Throws(Exception::class)
-    suspend fun getPokemons(forceReload: Boolean): List<Pokemon> {
-        val cachedPokemons = database.getAllPokemons()
-        return if (cachedPokemons.isNotEmpty() && !forceReload) {
-            cachedPokemons.toDomain()
-        } else {
-            val pokemons = api
-                .getAllPokemonUrlList()
-                .results
-                .map {
-                    api.getPokemonDetails(it.url)
-                }
+    suspend fun getApiPokemons(offset: Int): List<PokemonResponse> {
+        return api
+            .getAllPokemonUrlList(offset)
+            .results
+            .map {
+                api.getPokemonDetails(it.url)
+            }
+    }
 
-            database.clearDatabase()
-            database.createPokemons(pokemons)
+    @Throws(Exception::class)
+    fun getStoredPokemons(): List<PokemonDto> {
+        return database.getAllPokemons()
+    }
 
-            pokemons.map { it.toDomain() }
-        }
+    @Throws(Exception::class)
+    fun getStoredPokemonsCount(): Int {
+        return database.getPokemonsCount()
+    }
+
+    @Throws(Exception::class)
+    fun getUnseenPokemons(): List<PokemonDto> {
+        return database.getAllUnseenPokemons()
+    }
+
+    @Throws(Exception::class)
+    fun getUnseenPokemonsCount(): Int {
+        return database.getUnseenPokemonsCount()
+    }
+
+    @Throws(Exception::class)
+    fun updatePokemon(pokemonDto: PokemonDto) {
+        return database.updatePokemon(pokemonDto)
+    }
+
+    @Throws(Exception::class)
+    fun getPokemon(id: Long): PokemonDto? {
+        return database.getPokemon(id = id)
+    }
+
+    @Throws(Exception::class)
+    fun insertAllPokemons(pokemons: List<PokemonDto>) {
+        database.createPokemons(pokemons)
     }
 }
