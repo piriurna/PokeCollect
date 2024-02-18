@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.piriurna.pokecollect.android.MyApplicationTheme
-import com.piriurna.pokecollect.android.pokedex.ui.components.PokedexItem
+import com.piriurna.pokecollect.android.pokemondisplay.ui.components.BattlePoxedexItem
 import com.piriurna.pokecollect.domain.models.Pokemon
 
 @Composable
@@ -58,7 +57,6 @@ private fun PokemonDisplayScreenContent(
                 .fillMaxWidth(),
             pokemon = uiState.currentPokemon,
             onNextPokemonLoadClicked = onNextPokemonLoadClicked,
-            onCatchPokemonPressed = onCatchPokemonPressed,
             isLoading = uiState.isLoading
         )
 
@@ -67,7 +65,11 @@ private fun PokemonDisplayScreenContent(
                 .fillMaxSize(),
             state = rememberPagerState { uiState.ownedPokemonList.size }
         ) {
-            PokedexItem(modifier = Modifier.weight(1f), pokemon = uiState.ownedPokemonList[it])
+            BattlePoxedexItem(
+                modifier = Modifier.fillMaxSize(),
+                pokemon = uiState.ownedPokemonList[it],
+                onBattleClicked = { onCatchPokemonPressed(uiState.currentPokemon!!) },
+            )
         }
     }
 }
@@ -77,7 +79,6 @@ private fun PokemonEncounterContainer(
     modifier: Modifier = Modifier,
     pokemon: Pokemon?,
     onNextPokemonLoadClicked: () -> Unit,
-    onCatchPokemonPressed: (Pokemon) -> Unit,
     isLoading: Boolean
 ) {
     Column(
@@ -102,17 +103,10 @@ private fun PokemonEncounterContainer(
                 }
 
                 Button(onClick = onNextPokemonLoadClicked) {
-                    Text(text = "Load Next")
+                    Text(text = "Load Next", color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = { pokemon?.let { onCatchPokemonPressed(pokemon) } },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
-                ) {
-                    Text(text = "Catch it")
-                }
             }
         }
     }
