@@ -15,9 +15,9 @@ interface PokemonRepository {
 
     suspend fun getPokemon(id: Long): PokemonDto?
 
-    suspend fun getUnseenPokemonAtIndex(index: Int): PokemonDto?
+    suspend fun getSeenPokemon(coroutineContext: CoroutineContext): Flow<List<PokemonDto>>
 
-    suspend fun getUnseenPokemonCount(): Int
+    suspend fun getRandomWildPokemon(): PokemonDto?
 
     suspend fun insertAllPokemons(pokemons: List<PokemonDto>)
 

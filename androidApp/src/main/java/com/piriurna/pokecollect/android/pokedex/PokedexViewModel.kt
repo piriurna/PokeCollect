@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.piriurna.pokecollect.domain.models.Pokemon
-import com.piriurna.pokecollect.domain.usecases.GetOwnedPokemonsUseCase
+import com.piriurna.pokecollect.domain.usecases.GetSeenPokemonUseCase
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -16,7 +16,7 @@ data class PokedexUiState(
 )
 
 class PokedexViewModel constructor(
-    private val getOwnedPokemonsUseCase: GetOwnedPokemonsUseCase
+    private val getSeenPokemonUseCase: GetSeenPokemonUseCase
 ): ViewModel() {
 
     private val _uiState: MutableState<PokedexUiState> = mutableStateOf(PokedexUiState())
@@ -26,7 +26,7 @@ class PokedexViewModel constructor(
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         viewModelScope.launch {
-            getOwnedPokemonsUseCase(viewModelScope.coroutineContext).collectLatest {
+            getSeenPokemonUseCase(viewModelScope.coroutineContext).collectLatest {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     pokemonList = it

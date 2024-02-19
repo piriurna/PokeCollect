@@ -23,15 +23,27 @@ selectAllPokemon:
 SELECT Pokemon.*
 FROM Pokemon;
 
-selectAllUnseenPokemon:
+selectAllSeenPokemon:
 SELECT Pokemon.*
 FROM Pokemon
-WHERE seen = 0;
+WHERE seen = 1;
 
 unseenPokemonCount:
 SELECT COUNT(*)
 FROM Pokemon
 WHERE seen = 0;
+
+wildPokemonCount:
+SELECT COUNT(*)
+FROM Pokemon
+WHERE owned = 0;
+
+randomWildPokemon:
+SELECT *
+FROM Pokemon
+WHERE owned = 0
+ORDER BY RANDOM()
+LIMIT 1;
 
 selectPokemon:
 SELECT Pokemon.*

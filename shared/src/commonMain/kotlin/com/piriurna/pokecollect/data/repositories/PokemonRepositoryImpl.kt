@@ -27,13 +27,13 @@ class PokemonRepositoryImpl constructor(
         return pokemonSDK.getPokemon(id)
     }
 
-    override suspend fun getUnseenPokemonAtIndex(index: Int): PokemonDto? {
-        return pokemonSDK.getUnseenPokemons().elementAtOrNull(index)
-    }
-    override suspend fun getUnseenPokemonCount(): Int {
-        return pokemonSDK.getUnseenPokemonsCount()
+    override suspend fun getSeenPokemon(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
+        return pokemonSDK.getSeenPokemons(coroutineContext)
     }
 
+    override suspend fun getRandomWildPokemon(): PokemonDto? {
+        return pokemonSDK.getRandomWildPokemon()
+    }
     override suspend fun insertAllPokemons(pokemons: List<PokemonDto>) {
         pokemonSDK.insertAllPokemons(pokemons)
     }

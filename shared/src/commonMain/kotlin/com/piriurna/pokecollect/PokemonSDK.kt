@@ -33,13 +33,13 @@ class PokemonSDK(databaseDriverFactory: DatabaseDriverFactory) {
     }
 
     @Throws(Exception::class)
-    fun getUnseenPokemons(): List<PokemonDto> {
-        return database.getAllUnseenPokemons()
+    fun getSeenPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
+        return database.getAllSeenPokemons(coroutineContext)
     }
 
     @Throws(Exception::class)
-    fun getUnseenPokemonsCount(): Int {
-        return database.getUnseenPokemonsCount()
+    fun getRandomWildPokemon(): PokemonDto? {
+        return database.getRandomWildPokemons()
     }
 
     @Throws(Exception::class)
