@@ -4,27 +4,26 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val DanubeBlue = Color(0xFF5A8BCD)
-val OldGold = Color(0xFFD5AC4A)
-val MatisseBlue = Color(0xFF2062AC)
-val TaraweraBlue = Color(0XFF083962)
+val MidnightBlue = Color(0xFF003049)
+val Orange = Color(0xFFF77F00)
+val PoppyRed = Color(0xFFD62828)
+
+val JetBlack = Color(0xFF323031)
+val White = Color(0xFFFBFBFB)
 
 val lightColors = lightColorScheme(
-    primary = DanubeBlue,
-    secondary = OldGold,
-    tertiary = MatisseBlue,
-    onPrimary = Color.White,
-    surface = OldGold,
-    onSurface = Color.White
+    primary = MidnightBlue,
+    secondary = Orange,
+    tertiary = PoppyRed,
+    onPrimary = White,
+    background = White,
+    onSecondary = JetBlack
 )
 
 val darkColors = darkColorScheme(
-    primary = MatisseBlue,
-    secondary = OldGold,
-    tertiary = MatisseBlue,
-    surface = OldGold,
-    onSurface = Color.White,
-    background = DanubeBlue,
-    onPrimary = Color.White,
-    onSecondary = Color.Black
+    primary = MidnightBlue,
+    secondary = Orange,
+    tertiary = PoppyRed,
+    onPrimary = White,
+    onSecondary = JetBlack
 )

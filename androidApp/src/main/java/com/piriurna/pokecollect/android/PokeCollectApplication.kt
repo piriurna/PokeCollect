@@ -1,6 +1,7 @@
 package com.piriurna.pokecollect.android
 
 import android.app.Application
+import com.piriurna.pokecollect.android.pokedex.PokedexViewModel
 import com.piriurna.pokecollect.android.pokemondisplay.PokemonDisplayViewModel
 import com.piriurna.pokecollect.data.database.DatabaseDriverFactory
 import com.piriurna.pokecollect.di.appModule
@@ -14,6 +15,8 @@ class PokeCollectApplication: Application() {
         single<DatabaseDriverFactory> { DatabaseDriverFactory(get()) }
 
         viewModel { PokemonDisplayViewModel(get(), get(), get(), get()) }
+
+        viewModel { PokedexViewModel(get()) }
     }
 
     override fun onCreate() {
