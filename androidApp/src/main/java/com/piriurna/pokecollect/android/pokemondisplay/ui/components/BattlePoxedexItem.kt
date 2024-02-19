@@ -20,8 +20,7 @@ import com.piriurna.pokecollect.domain.models.Pokemon
 @Composable
 fun BattlePoxedexItem(
     modifier: Modifier = Modifier,
-    pokemon: Pokemon,
-    onBattleClicked: () -> Unit
+    pokemon: Pokemon
 ) {
     Column(
         modifier = modifier.background(MaterialTheme.colorScheme.surface),
@@ -36,10 +35,5 @@ fun BattlePoxedexItem(
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = pokemon.name, color = Color.White)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onBattleClicked) {
-            Text(text = "Battle")
-        }
     }
 }

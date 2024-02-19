@@ -1,22 +1,31 @@
 package com.piriurna.pokecollect.android.pokemondisplay
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +50,6 @@ fun PokemonDisplayScreen(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PokemonDisplayScreenContent(
     modifier: Modifier = Modifier,
@@ -49,28 +57,44 @@ private fun PokemonDisplayScreenContent(
     onNextPokemonLoadClicked: () -> Unit = {},
     onCatchPokemonPressed: (Pokemon) -> Unit = {}
 ) {
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        PokemonEncounterContainer(
-            modifier = Modifier
-                .fillMaxHeight(0.6f)
-                .fillMaxWidth(),
-            pokemon = uiState.currentPokemon,
-            onNextPokemonLoadClicked = onNextPokemonLoadClicked,
-            isLoading = uiState.isLoading
-        )
-
-        HorizontalPager(
-            modifier = Modifier
-                .fillMaxSize(),
-            state = rememberPagerState { uiState.ownedPokemonList.size }
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = modifier.fillMaxSize()
         ) {
-            BattlePoxedexItem(
-                modifier = Modifier.fillMaxSize(),
-                pokemon = uiState.ownedPokemonList[it],
-                onBattleClicked = { onCatchPokemonPressed(uiState.currentPokemon!!) },
+            PokemonEncounterContainer(
+                modifier = Modifier
+                    .fillMaxHeight(0.6f)
+                    .fillMaxWidth(),
+                pokemon = uiState.currentPokemon,
+                isLoading = uiState.isLoading
             )
+
+            PokedexContainer(
+                modifier = Modifier
+                    .fillMaxSize(),
+                uiState = uiState
+            )
+        }
+
+
+        Row(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(onClick = onNextPokemonLoadClicked, colors = ButtonDefaults.buttonColors()) {
+                Text(text = "Flee")
+            }
+
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = "Versus",
+                style = MaterialTheme.typography.headlineSmall,
+            )
+
+            Button(onClick = { onCatchPokemonPressed(uiState.currentPokemon!!) }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)) {
+                Text(text = "Battle")
+            }
         }
     }
 }
@@ -79,7 +103,6 @@ private fun PokemonDisplayScreenContent(
 private fun PokemonEncounterContainer(
     modifier: Modifier = Modifier,
     pokemon: Pokemon?,
-    onNextPokemonLoadClicked: () -> Unit,
     isLoading: Boolean
 ) {
     Column(
@@ -102,14 +125,25 @@ private fun PokemonEncounterContainer(
                     Text(text = it.name)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-
-                Button(onClick = onNextPokemonLoadClicked) {
-                    Text(text = "Load Next", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
             }
         }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun PokedexContainer(
+    modifier: Modifier = Modifier,
+    uiState: PokemonDisplayUiState
+) {
+    HorizontalPager(
+        modifier = modifier,
+        state = rememberPagerState { uiState.ownedPokemonList.size }
+    ) {
+        BattlePoxedexItem(
+            modifier = Modifier.fillMaxSize(),
+            pokemon = uiState.ownedPokemonList[it],
+        )
     }
 }
 
