@@ -31,6 +31,7 @@ fun PokemonDisplayScreen(
     viewModel: PokemonDisplayViewModel
 ) {
     val uiState = viewModel.uiState.value
+
     LaunchedEffect(Unit) {
         viewModel.setup()
         viewModel.getNextPokemon()
