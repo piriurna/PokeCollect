@@ -1,11 +1,9 @@
 package com.piriurna.pokecollect.android.battle
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.piriurna.pokecollect.android.ui.common.BaseViewModel
+import com.piriurna.pokecollect.android.ui.common.UiState
 import com.piriurna.pokecollect.domain.models.Pokemon
 import com.piriurna.pokecollect.domain.usecases.CatchPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.GetPokemonUseCase
@@ -16,7 +14,7 @@ data class BattleUiState(
     val isLoading: Boolean = false,
     val pokemonList: List<Pokemon> = emptyList(),
     val currentTurn: Int = 0
-) {
+):UiState {
 
     val playerPokemon = pokemonList.getOrNull(0)
     val enemyPokemon = pokemonList.getOrNull(1)
@@ -30,13 +28,12 @@ class BattleViewModel constructor(
     private val getPokemonUseCase: GetPokemonUseCase,
     private val catchPokemonUseCase: CatchPokemonUseCase,
     savedStateHandle: SavedStateHandle,
-): ViewModel() {
+): BaseViewModel<BattleUiState>() {
 
-    private val _uiState: MutableState<BattleUiState> = mutableStateOf(BattleUiState())
-    val uiState: State<BattleUiState> = _uiState
+    override fun initialState() = BattleUiState()
 
     init {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+        updateState(uiState.value.copy(isLoading = true))
 
         val playerPokemon = savedStateHandle.get<Int>("attackingPokemon_id")?.let {
             getPokemonUseCase(it)
@@ -47,20 +44,24 @@ class BattleViewModel constructor(
             getPokemonUseCase(it)
         }
 
-        _uiState.value = _uiState.value.copy(
-            isLoading = false,
-            pokemonList = listOfNotNull(playerPokemon, enemyPokemon)
+        updateState(
+            uiState.value.copy(
+                isLoading = false,
+                pokemonList = listOfNotNull(playerPokemon, enemyPokemon)
+            )
         )
     }
 
     fun battlePokemons() {
-        with(_uiState.value) {
+        with(uiState.value) {
             if (battleEnded) return
 
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                pokemonList = battlePokemonUseCase(pokemonList, currentTurn),
-                currentTurn = _uiState.value.currentTurn + 1
+            updateState(
+                uiState.value.copy(
+                    isLoading = false,
+                    pokemonList = battlePokemonUseCase(pokemonList, currentTurn),
+                    currentTurn = uiState.value.currentTurn + 1
+                )
             )
         }
     }

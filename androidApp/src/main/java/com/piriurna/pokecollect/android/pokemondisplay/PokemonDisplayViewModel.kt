@@ -1,10 +1,8 @@
 package com.piriurna.pokecollect.android.pokemondisplay
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.piriurna.pokecollect.android.ui.common.BaseViewModel
+import com.piriurna.pokecollect.android.ui.common.UiState
 import com.piriurna.pokecollect.domain.models.Pokemon
 import com.piriurna.pokecollect.domain.usecases.GetNextPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.GetOwnedPokemonsUseCase
@@ -18,22 +16,22 @@ data class PokemonDisplayUiState(
     val isLoading: Boolean = false,
     val hasFetched: Boolean = false,
     val ownedPokemonList: List<Pokemon> = emptyList()
-)
+): UiState
+
 class PokemonDisplayViewModel constructor(
     private val getNextPokemonUseCase: GetNextPokemonUseCase,
     private val setPokemonAsSeenUseCase: SetPokemonAsSeenUseCase,
     private val getOwnedPokemonsUseCase: GetOwnedPokemonsUseCase
-): ViewModel() {
+): BaseViewModel<PokemonDisplayUiState>() {
 
-    private val _uiState: MutableState<PokemonDisplayUiState> = mutableStateOf(PokemonDisplayUiState())
-    val uiState: State<PokemonDisplayUiState> = _uiState
+    override fun initialState() = PokemonDisplayUiState()
 
     init {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            updateState(uiState.value.copy(isLoading = true))
 
             getOwnedPokemonsUseCase(viewModelScope.coroutineContext).collectLatest {
-                _uiState.value = _uiState.value.copy(ownedPokemonList = it)
+                updateState(uiState.value.copy(ownedPokemonList = it))
             }
 
         }
@@ -43,7 +41,7 @@ class PokemonDisplayViewModel constructor(
 
     fun getNextPokemon() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            updateState(uiState.value.copy(isLoading = true))
 
             delay(1000)
             
@@ -53,9 +51,11 @@ class PokemonDisplayViewModel constructor(
                 setPokemonAsSeenUseCase(it.id)
             }
 
-            _uiState.value = _uiState.value.copy(
-                currentPokemon = pokemon,
-                isLoading = false
+            updateState(
+                uiState.value.copy(
+                    currentPokemon = pokemon,
+                    isLoading = false
+                )
             )
 
         }
