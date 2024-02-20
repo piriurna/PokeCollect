@@ -3,12 +3,13 @@ package com.piriurna.pokecollect.domain.mappers
 import com.piriurna.pokecollect.data.entity.PokemonDto
 import com.piriurna.pokecollect.data.network.models.PokemonResponse
 import com.piriurna.pokecollect.domain.models.Pokemon
+import com.piriurna.pokecollect.domain.models.PokemonType
 
 fun PokemonDto.toDomain(): Pokemon {
     return Pokemon(
         id = id,
         name = name,
-        type = kind,
+        type = convertPokemonType(kind),
         imageUrl = imageUrl,
         seen = seen == 1,
         owned = owned == 1,
@@ -39,7 +40,7 @@ fun Pokemon.toDto(lastTimeUsedTimestamp: Long): PokemonDto {
         id = id,
         name = name,
         imageUrl = imageUrl,
-        kind = type,
+        kind = type.name,
         seen = if(seen) 1 else 0,
         owned = if (owned) 1 else 0,
         hp = totalHp,
@@ -47,4 +48,16 @@ fun Pokemon.toDto(lastTimeUsedTimestamp: Long): PokemonDto {
         attackPower = attackPower,
         lastUsedTimestamp = lastTimeUsedTimestamp
     )
+}
+
+private fun convertPokemonType(type: String): PokemonType {
+    return when(type) {
+        "fire" -> PokemonType.Fire
+
+        "grass" -> PokemonType.Earth
+
+        "water" -> PokemonType.Water
+
+        else -> PokemonType.Unknown
+    }
 }
