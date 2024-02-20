@@ -1,9 +1,6 @@
 package com.piriurna.pokecollect.android.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -25,12 +22,12 @@ fun PokeCollectNavHost(
 ) {
     val rootScreens = listOf(
         BottomNavigationItem(
-            icon = Icons.Filled.Home,
+            icon = R.drawable.ic_wild_grass,
             text = stringResource(R.string.pokemon_encounter),
             route = PokemonDisplayRoute
         ),
         BottomNavigationItem(
-            icon = Icons.Filled.Info,
+            icon = R.drawable.ic_pokeball,
             text = stringResource(R.string.pokedex),
             route = PokedexDestinations.PokedexRoute
         )

@@ -5,5 +5,5 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 fun pokemonDisplayModule() = module {
-    viewModel { PokemonDisplayViewModel(get(), get(), get(), get()) }
+    viewModel { PokemonDisplayViewModel(get(), get(), get()) }
 }

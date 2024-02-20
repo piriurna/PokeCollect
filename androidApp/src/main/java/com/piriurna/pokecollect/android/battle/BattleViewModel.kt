@@ -29,17 +29,17 @@ class BattleViewModel constructor(
     private val battlePokemonUseCase: BattlePokemonUseCase,
     private val getPokemonUseCase: GetPokemonUseCase,
     private val catchPokemonUseCase: CatchPokemonUseCase,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
     private val _uiState: MutableState<BattleUiState> = mutableStateOf(BattleUiState())
     val uiState: State<BattleUiState> = _uiState
 
-    fun setup() {
+    init {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         val playerPokemon = savedStateHandle.get<Int>("attackingPokemon_id")?.let {
-             getPokemonUseCase(it)
+            getPokemonUseCase(it)
         }
 
         val enemyPokemon = savedStateHandle.get<Int>("defendingPokemon_id")?.let {

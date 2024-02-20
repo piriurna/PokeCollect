@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.piriurna.pokecollect.domain.models.Pokemon
-import com.piriurna.pokecollect.domain.usecases.CatchPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.GetNextPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.GetOwnedPokemonsUseCase
 import com.piriurna.pokecollect.domain.usecases.SetPokemonAsSeenUseCase
@@ -23,15 +22,13 @@ data class PokemonDisplayUiState(
 class PokemonDisplayViewModel constructor(
     private val getNextPokemonUseCase: GetNextPokemonUseCase,
     private val setPokemonAsSeenUseCase: SetPokemonAsSeenUseCase,
-    private val getOwnedPokemonsUseCase: GetOwnedPokemonsUseCase,
-    private val catchPokemonUseCase: CatchPokemonUseCase
+    private val getOwnedPokemonsUseCase: GetOwnedPokemonsUseCase
 ): ViewModel() {
 
     private val _uiState: MutableState<PokemonDisplayUiState> = mutableStateOf(PokemonDisplayUiState())
     val uiState: State<PokemonDisplayUiState> = _uiState
 
-
-    fun setup() {
+    init {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
@@ -40,7 +37,10 @@ class PokemonDisplayViewModel constructor(
             }
 
         }
+
+        getNextPokemon()
     }
+
     fun getNextPokemon() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -58,14 +58,6 @@ class PokemonDisplayViewModel constructor(
                 isLoading = false
             )
 
-        }
-    }
-
-    fun catchPokemon(pokemon: Pokemon) {
-        viewModelScope.launch {
-            catchPokemonUseCase(pokemon)
-
-            getNextPokemon()
         }
     }
 }

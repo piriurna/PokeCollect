@@ -8,16 +8,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.piriurna.pokecollect.android.battle.components.HealthBar
+import com.piriurna.pokecollect.android.battle.theme.BattleDimensions.HealthbarHeight
+import com.piriurna.pokecollect.android.battle.theme.BattleDimensions.PokemonImageSize
 import com.piriurna.pokecollect.android.pokedex.navigation.PokedexDestinations
 
 @Composable
@@ -28,12 +29,8 @@ fun BattleScreen(
 ) {
     val uiState = viewModel.uiState.value
 
-    LaunchedEffect(Unit) {
-        viewModel.setup()
-    }
-
     LaunchedEffect(uiState.battleEnded) {
-        if (uiState.playerPokemon != null && uiState.enemyPokemon != null) {
+        if (uiState.battleEnded && uiState.playerPokemon != null && uiState.enemyPokemon != null) {
             viewModel.battleFinished()
             navController.navigate(PokedexDestinations.PokedexRoute)
         }
@@ -52,15 +49,15 @@ fun BattleScreen(
             ) {
                 HealthBar(
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(36.dp),
+                        .width(PokemonImageSize)
+                        .height(HealthbarHeight),
                     currentHp = uiState.enemyPokemon.currentHp,
                     maxHp = uiState.enemyPokemon.totalHp,
-                    fillColor = Color.Red
+                    fillColor = MaterialTheme.colorScheme.secondary
                 )
 
                 AsyncImage(
-                    modifier = Modifier.size(100.dp),
+                    modifier = Modifier.size(PokemonImageSize),
                     model = uiState.enemyPokemon.imageUrl,
                     contentDescription = ""
                 )
@@ -77,13 +74,13 @@ fun BattleScreen(
             ) {
                 HealthBar(
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(36.dp),
+                        .width(PokemonImageSize)
+                        .height(HealthbarHeight),
                     currentHp = uiState.playerPokemon.currentHp,
                     maxHp = uiState.playerPokemon.totalHp
                 )
                 AsyncImage(
-                    modifier = Modifier.size(100.dp),
+                    modifier = Modifier.size(PokemonImageSize),
                     model = uiState.playerPokemon.imageUrl,
                     contentDescription = ""
                 )

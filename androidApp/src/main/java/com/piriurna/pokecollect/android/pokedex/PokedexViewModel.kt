@@ -22,10 +22,9 @@ class PokedexViewModel constructor(
     private val _uiState: MutableState<PokedexUiState> = mutableStateOf(PokedexUiState())
     val uiState: State<PokedexUiState> = _uiState
 
-    fun setupScreen() {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-
+    init {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
             getSeenPokemonUseCase(viewModelScope.coroutineContext).collectLatest {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,

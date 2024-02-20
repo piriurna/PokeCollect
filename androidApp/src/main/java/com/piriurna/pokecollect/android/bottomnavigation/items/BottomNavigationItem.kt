@@ -1,9 +1,9 @@
 package com.piriurna.pokecollect.android.bottomnavigation.items
 
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
 
 data class BottomNavigationItem(
-    val icon: ImageVector,
+    @DrawableRes val icon: Int,
     val text: String,
     val route: String
 )
