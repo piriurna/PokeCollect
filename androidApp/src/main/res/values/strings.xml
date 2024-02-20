@@ -5,4 +5,6 @@
     <string name="battle">Battle</string>
     <string name="flee">Flee</string>
     <string name="versus">Versus</string>
+    <string name="pokemon_encounter">Pokemon Encounter</string>
+    <string name="pokedex">Pokedex</string>
 </resources>

@@ -13,48 +13,58 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.piriurna.pokecollect.android.MyApplicationTheme
 import com.piriurna.pokecollect.android.R
 import com.piriurna.pokecollect.android.pokemondisplay.ui.components.BattlePoxedexItem
-import com.piriurna.pokecollect.android.pokemondisplay.ui.theme.DisplayScreenDimensions.PokemonEncounterFraction
 import com.piriurna.pokecollect.android.pokemondisplay.ui.theme.DisplayScreenDimensions.DisplayScreenPokemonImageSize
+import com.piriurna.pokecollect.android.pokemondisplay.ui.theme.DisplayScreenDimensions.PokemonEncounterFraction
+import com.piriurna.pokecollect.android.ui.theme.AppTheme
 import com.piriurna.pokecollect.android.ui.theme.spacing
 import com.piriurna.pokecollect.domain.models.Pokemon
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PokemonDisplayScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: PokemonDisplayViewModel
 ) {
     val uiState = viewModel.uiState.value
 
-    LaunchedEffect(Unit) {
-        viewModel.setup()
-        viewModel.getNextPokemon()
-    }
+    val pokedexPagerState = rememberPagerState { uiState.ownedPokemonList.size }
 
-    PokemonDisplayScreenContent(modifier, uiState, viewModel::getNextPokemon, viewModel::catchPokemon)
+    PokemonDisplayScreenContent(
+        modifier = modifier,
+        uiState = uiState,
+        onNextPokemonLoadClicked = viewModel::getNextPokemon,
+        onCatchPokemonPressed = { navController.navigate(
+            "battle/${uiState.ownedPokemonList[pokedexPagerState.currentPage].id}/${uiState.currentPokemon?.id}")
+        },
+        pagerState = pokedexPagerState
+    )
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PokemonDisplayScreenContent(
     modifier: Modifier = Modifier,
     uiState: PokemonDisplayUiState,
     onNextPokemonLoadClicked: () -> Unit = {},
-    onCatchPokemonPressed: (Pokemon) -> Unit = {}
+    onCatchPokemonPressed: (Pokemon) -> Unit = {},
+    pagerState: PagerState = rememberPagerState { uiState.ownedPokemonList.size }
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -71,7 +81,8 @@ private fun PokemonDisplayScreenContent(
             PokedexContainer(
                 modifier = Modifier
                     .fillMaxSize(),
-                uiState = uiState
+                uiState = uiState,
+                pagerState = pagerState
             )
         }
 
@@ -133,11 +144,12 @@ private fun PokemonEncounterContainer(
 @Composable
 private fun PokedexContainer(
     modifier: Modifier = Modifier,
-    uiState: PokemonDisplayUiState
+    uiState: PokemonDisplayUiState,
+    pagerState: PagerState
 ) {
     HorizontalPager(
         modifier = modifier,
-        state = rememberPagerState { uiState.ownedPokemonList.size }
+        state = pagerState
     ) {
         BattlePoxedexItem(
             modifier = Modifier.fillMaxSize(),
@@ -147,10 +159,11 @@ private fun PokedexContainer(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun PokemonDisplayScreenPreview() {
-    MyApplicationTheme {
+    AppTheme {
         PokemonDisplayScreenContent(
             uiState = PokemonDisplayUiState(
                 currentPokemon = Pokemon(

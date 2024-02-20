@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.piriurna.pokecollect.android.pokedex.ui.components.PokedexItem
 import com.piriurna.pokecollect.android.ui.theme.spacing
@@ -20,10 +19,6 @@ fun PokedexScreen(
     viewModel: PokedexViewModel
 ) {
     val uiState = viewModel.uiState.value
-    LaunchedEffect(Unit) {
-        viewModel.setupScreen()
-    }
-
 
     LazyVerticalGrid(
         modifier = modifier
