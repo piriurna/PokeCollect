@@ -16,5 +16,11 @@ data class PokemonDto(
     @SerialName("seen")
     val seen: Int,
     @SerialName("owned")
-    val owned: Int
+    val owned: Int,
+    @SerialName("hp")
+    val hp: Int,
+    @SerialName("defensePower")
+    val defensePower: Int,
+    @SerialName("attackPower")
+    val attackPower: Int
 )

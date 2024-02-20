@@ -11,7 +11,10 @@ fun PokemonDto.toDomain(): Pokemon {
         type = kind,
         imageUrl = imageUrl,
         seen = seen == 1,
-        owned = owned == 1
+        owned = owned == 1,
+        hp = hp,
+        defensePower = defensePower,
+        attackPower = attackPower
     )
 }
 
@@ -22,7 +25,10 @@ fun PokemonResponse.toDto(): PokemonDto {
         imageUrl = sprites.frontDefault?:"",
         kind = types.firstOrNull()?.type?.name?:"",
         seen = 0,
-        owned = 0
+        owned = 0,
+        hp = stats.firstOrNull { it.stat.name == "hp" }?.baseStat?:0,
+        defensePower = stats.firstOrNull { it.stat.name == "defense" }?.baseStat?:0,
+        attackPower = stats.firstOrNull { it.stat.name == "attack" }?.baseStat?:0
     )
 }
 
@@ -33,6 +39,9 @@ fun Pokemon.toDto(): PokemonDto {
         imageUrl = imageUrl,
         kind = type,
         seen = if(seen) 1 else 0,
-        owned = if (owned) 1 else 0
+        owned = if (owned) 1 else 0,
+        hp = hp,
+        defensePower = defensePower,
+        attackPower = attackPower
     )
 }

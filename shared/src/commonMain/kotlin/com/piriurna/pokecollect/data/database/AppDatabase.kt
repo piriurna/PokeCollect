@@ -58,7 +58,10 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
                 imageUrl = imageUrl,
                 kind = kind,
                 seen = seen.toLong(),
-                owned = owned.toLong()
+                owned = owned.toLong(),
+                hp = hp.toLong(),
+                defensePower = defensePower.toLong(),
+                attackPower = attackPower.toLong()
             )
         }
     }
@@ -68,8 +71,11 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
             name = pokemon.name,
             imageUrl = pokemon.imageUrl,
             kind = pokemon.kind,
-            seen = 0,
-            owned = 0
+            seen = pokemon.seen.toLong(),
+            owned = pokemon.owned.toLong(),
+            hp = pokemon.hp.toLong(),
+            defensePower = pokemon.defensePower.toLong(),
+            attackPower = pokemon.attackPower.toLong()
         )
     }
 
@@ -79,7 +85,10 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         imageUrl: String,
         kind: String,
         seen: Long,
-        owned: Long
+        owned: Long,
+        hp: Long,
+        defensePower: Long,
+        attackPower: Long
     ): PokemonDto {
         return PokemonDto(
             id = id,
@@ -87,7 +96,10 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
             imageUrl = imageUrl,
             kind = kind,
             seen = seen.toInt(),
-            owned = owned.toInt()
+            owned = owned.toInt(),
+            hp = hp.toInt(),
+            defensePower = defensePower.toInt(),
+            attackPower = attackPower.toInt()
         )
     }
 }

@@ -6,5 +6,8 @@ data class Pokemon(
     val imageUrl: String,
     val type: String,
     val seen: Boolean,
-    val owned: Boolean
+    val owned: Boolean,
+    val hp: Int,
+    val defensePower: Int,
+    val attackPower: Int
 )
