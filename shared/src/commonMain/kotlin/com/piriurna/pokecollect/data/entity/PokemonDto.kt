@@ -22,5 +22,7 @@ data class PokemonDto(
     @SerialName("defensePower")
     val defensePower: Int,
     @SerialName("attackPower")
-    val attackPower: Int
+    val attackPower: Int,
+    @SerialName("lastUsedTimestamp")
+    val lastUsedTimestamp: Long
 )

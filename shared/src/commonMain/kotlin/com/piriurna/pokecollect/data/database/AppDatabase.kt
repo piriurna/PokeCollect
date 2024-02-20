@@ -11,13 +11,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
     private val dbQuery = database.appDatabaseQueries
 
-
-    internal fun clearDatabase() {
-        dbQuery.transaction {
-            dbQuery.removeAllPokemons()
-        }
-    }
-
     internal fun getAllPokemons(): List<PokemonDto> {
         return dbQuery.selectAllPokemon(::mapPokemonSelecting).executeAsList()
     }
@@ -61,7 +54,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
                 owned = owned.toLong(),
                 hp = hp.toLong(),
                 defensePower = defensePower.toLong(),
-                attackPower = attackPower.toLong()
+                attackPower = attackPower.toLong(),
+                lastUsedTimestamp = lastUsedTimestamp
             )
         }
     }
@@ -75,7 +69,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
             owned = pokemon.owned.toLong(),
             hp = pokemon.hp.toLong(),
             defensePower = pokemon.defensePower.toLong(),
-            attackPower = pokemon.attackPower.toLong()
+            attackPower = pokemon.attackPower.toLong(),
+            lastUsedTimestamp = pokemon.lastUsedTimestamp
         )
     }
 
@@ -88,7 +83,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         owned: Long,
         hp: Long,
         defensePower: Long,
-        attackPower: Long
+        attackPower: Long,
+        lastUsedTimestamp: Long
     ): PokemonDto {
         return PokemonDto(
             id = id,
@@ -99,7 +95,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
             owned = owned.toInt(),
             hp = hp.toInt(),
             defensePower = defensePower.toInt(),
-            attackPower = attackPower.toInt()
+            attackPower = attackPower.toInt(),
+            lastUsedTimestamp = lastUsedTimestamp
         )
     }
 }

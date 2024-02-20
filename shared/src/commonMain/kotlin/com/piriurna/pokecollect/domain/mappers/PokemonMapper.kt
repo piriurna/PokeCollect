@@ -29,11 +29,12 @@ fun PokemonResponse.toDto(): PokemonDto {
         owned = 0,
         hp = stats.firstOrNull { it.stat.name == "hp" }?.baseStat?:0,
         defensePower = stats.firstOrNull { it.stat.name == "defense" }?.baseStat?:0,
-        attackPower = stats.firstOrNull { it.stat.name == "attack" }?.baseStat?:0
+        attackPower = stats.firstOrNull { it.stat.name == "attack" }?.baseStat?:0,
+        lastUsedTimestamp = 0
     )
 }
 
-fun Pokemon.toDto(): PokemonDto {
+fun Pokemon.toDto(lastTimeUsedTimestamp: Long): PokemonDto {
     return PokemonDto(
         id = id,
         name = name,
@@ -43,6 +44,7 @@ fun Pokemon.toDto(): PokemonDto {
         owned = if (owned) 1 else 0,
         hp = totalHp,
         defensePower = defensePower,
-        attackPower = attackPower
+        attackPower = attackPower,
+        lastUsedTimestamp = lastTimeUsedTimestamp
     )
 }

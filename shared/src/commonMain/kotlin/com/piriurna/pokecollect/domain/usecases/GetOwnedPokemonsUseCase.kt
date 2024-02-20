@@ -13,6 +13,10 @@ class GetOwnedPokemonsUseCase constructor(
 
 
     suspend operator fun invoke(coroutineContext: CoroutineContext): Flow<List<Pokemon>> {
-        return pokemonRepository.getOwnedPokemons(coroutineContext).map { pokemonList -> pokemonList.map { it.toDomain() } }
+        return pokemonRepository
+            .getOwnedPokemons(coroutineContext)
+            .map { pokemonList ->
+                pokemonList.map { it.toDomain() }
+            }
     }
 }

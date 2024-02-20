@@ -7,16 +7,14 @@ CREATE TABLE Pokemon(
     owned INTEGER NOT NULL DEFAULT 0,
     hp INTEGER NOT NULL DEFAULT 0,
     defensePower INTEGER NOT NULL DEFAULT 0,
-    attackPower INTEGER NOT NULL DEFAULT 0
+    attackPower INTEGER NOT NULL DEFAULT 0,
+    lastUsedTimestamp INTEGER NOT NULL DEFAULT 0
 );
 
 
 insertPokemon:
-INSERT INTO Pokemon(name, imageUrl, kind, seen, owned, hp, defensePower, attackPower)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-
-removeAllPokemons:
-DELETE FROM Pokemon;
+INSERT INTO Pokemon(name, imageUrl, kind, seen, owned, hp, defensePower, attackPower, lastUsedTimestamp)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 pokemonCount:
 SELECT COUNT(*)
@@ -46,8 +44,9 @@ WHERE id = ?;
 selectOwnedPokemon:
 SELECT Pokemon.*
 FROM Pokemon
-WHERE owned = 1;
+WHERE owned = 1
+ORDER BY lastUsedTimestamp;
 
 updatePokemon:
-INSERT OR REPLACE INTO Pokemon(id, name, imageUrl, kind, seen, owned, hp, defensePower, attackPower)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO Pokemon(id, name, imageUrl, kind, seen, owned, hp, defensePower, attackPower, lastUsedTimestamp)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);

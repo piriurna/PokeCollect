@@ -40,6 +40,7 @@ class BattleViewModel constructor(
 
         val playerPokemon = savedStateHandle.get<Int>("attackingPokemon_id")?.let {
             getPokemonUseCase(it)
+
         }
 
         val enemyPokemon = savedStateHandle.get<Int>("defendingPokemon_id")?.let {
