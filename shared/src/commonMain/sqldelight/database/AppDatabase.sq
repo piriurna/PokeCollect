@@ -20,6 +20,11 @@ pokemonCount:
 SELECT COUNT(*)
 FROM Pokemon;
 
+ownedPokemonCount:
+SELECT COUNT(*)
+FROM Pokemon
+WHERE owned = 1;
+
 selectAllPokemon:
 SELECT Pokemon.*
 FROM Pokemon;
@@ -28,6 +33,11 @@ selectAllSeenPokemon:
 SELECT Pokemon.*
 FROM Pokemon
 WHERE seen = 1;
+
+wildPokemonCount:
+SELECT COUNT(*)
+FROM Pokemon
+WHERE owned = 0;
 
 randomWildPokemon:
 SELECT *
@@ -41,11 +51,16 @@ SELECT Pokemon.*
 FROM Pokemon
 WHERE id = ?;
 
+selectPokemonList:
+SELECT Pokemon.*
+FROM Pokemon
+WHERE id IN ?;
+
 selectOwnedPokemon:
 SELECT Pokemon.*
 FROM Pokemon
 WHERE owned = 1
-ORDER BY lastUsedTimestamp;
+ORDER BY lastUsedTimestamp DESC;
 
 updatePokemon:
 INSERT OR REPLACE INTO Pokemon(id, name, imageUrl, kind, seen, owned, hp, defensePower, attackPower, lastUsedTimestamp)

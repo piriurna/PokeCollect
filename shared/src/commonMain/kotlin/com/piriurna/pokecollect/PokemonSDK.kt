@@ -38,6 +38,11 @@ class PokemonSDK(databaseDriverFactory: DatabaseDriverFactory) {
     }
 
     @Throws(Exception::class)
+    fun getWildPokemonCount(): Int {
+        return database.getWildPokemonCount()
+    }
+
+    @Throws(Exception::class)
     fun getRandomWildPokemon(): PokemonDto? {
         return database.getRandomWildPokemons()
     }
@@ -45,6 +50,11 @@ class PokemonSDK(databaseDriverFactory: DatabaseDriverFactory) {
     @Throws(Exception::class)
     fun getOwnedPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
         return database.getAllOwnedPokemons(coroutineContext)
+    }
+
+    @Throws(Exception::class)
+    fun getOwnedPokemonsCount(): Int {
+        return database.getOwnedPokemonsCount()
     }
 
     @Throws(Exception::class)
@@ -56,6 +66,13 @@ class PokemonSDK(databaseDriverFactory: DatabaseDriverFactory) {
     fun getPokemon(id: Long): PokemonDto? {
         return database.getPokemon(id = id)
     }
+
+    @Throws(Exception::class)
+    fun getPokemonList(ids: List<Long>): List<PokemonDto?> {
+        return database.getPokemonList(ids = ids)
+    }
+
+
 
     @Throws(Exception::class)
     fun insertAllPokemons(pokemons: List<PokemonDto>) {

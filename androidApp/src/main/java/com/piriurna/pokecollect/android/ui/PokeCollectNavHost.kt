@@ -11,10 +11,11 @@ import com.piriurna.pokecollect.android.R
 import com.piriurna.pokecollect.android.battle.navigation.battleNavigation
 import com.piriurna.pokecollect.android.bottomnavigation.BottomNavigator
 import com.piriurna.pokecollect.android.bottomnavigation.items.BottomNavigationItem
-import com.piriurna.pokecollect.android.pokedex.navigation.PokedexDestinations
+import com.piriurna.pokecollect.android.choosestarter.navigation.chooseStarterNavigation
 import com.piriurna.pokecollect.android.pokedex.navigation.pokedexNavigation
-import com.piriurna.pokecollect.android.pokemondisplay.navigation.PokemonDisplayDestinations.PokemonDisplayRoute
 import com.piriurna.pokecollect.android.pokemondisplay.navigation.pokemonDisplayNavigation
+import com.piriurna.pokecollect.android.splash.navigation.splashNavigation
+import com.piriurna.pokecollect.domain.destinations.Destination
 
 @Composable
 fun PokeCollectNavHost(
@@ -24,12 +25,12 @@ fun PokeCollectNavHost(
         BottomNavigationItem(
             icon = R.drawable.ic_wild_grass,
             text = stringResource(R.string.pokemon_encounter),
-            route = PokemonDisplayRoute
+            route = Destination.WildEncounterScreen.route
         ),
         BottomNavigationItem(
             icon = R.drawable.ic_pokeball,
             text = stringResource(R.string.pokedex),
-            route = PokedexDestinations.PokedexRoute
+            route = Destination.PokedexScreen.route
         )
     )
     val currentRoute = navHostController.currentBackStackEntryAsState().value?.destination?.route
@@ -42,9 +43,14 @@ fun PokeCollectNavHost(
         }
     ) { paddingValues ->
         NavHost(
-            startDestination = PokemonDisplayRoute,
+            startDestination = Destination.SplashScreen.route,
             navController = navHostController
         ) {
+
+            splashNavigation(paddingValues, navHostController)
+
+            chooseStarterNavigation(paddingValues, navHostController)
+
             pokemonDisplayNavigation(paddingValues, navHostController)
 
             pokedexNavigation(paddingValues)

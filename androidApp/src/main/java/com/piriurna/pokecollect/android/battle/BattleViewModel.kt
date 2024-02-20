@@ -33,34 +33,48 @@ class BattleViewModel constructor(
     override fun initialState() = BattleUiState()
 
     init {
-        updateState(uiState.value.copy(isLoading = true))
+        viewModelScope.launch {
+            updateState(uiState.value.copy(isLoading = true))
 
-        val playerPokemon = savedStateHandle.get<Int>("attackingPokemon_id")?.let {
-            getPokemonUseCase(it)
+            val playerPokemon = savedStateHandle.get<Int>("attackingPokemon_id")?.let {
+                getPokemonUseCase(it)
 
-        }
+            }
 
-        val enemyPokemon = savedStateHandle.get<Int>("defendingPokemon_id")?.let {
-            getPokemonUseCase(it)
-        }
-
-        updateState(
-            uiState.value.copy(
-                isLoading = false,
-                pokemonList = listOfNotNull(playerPokemon, enemyPokemon)
-            )
-        )
-    }
-
-    fun battlePokemons() {
-        with(uiState.value) {
-            if (battleEnded) return
+            val enemyPokemon = savedStateHandle.get<Int>("defendingPokemon_id")?.let {
+                getPokemonUseCase(it)
+            }
 
             updateState(
                 uiState.value.copy(
                     isLoading = false,
-                    pokemonList = battlePokemonUseCase(pokemonList, currentTurn),
-                    currentTurn = uiState.value.currentTurn + 1
+                    pokemonList = listOfNotNull(playerPokemon, enemyPokemon)
+                )
+            )
+        }
+    }
+
+    fun playerAttack() {
+        with(uiState.value) {
+            if (battleEnded || playerPokemon == null) return
+
+            updateState(
+                uiState.value.copy(
+                    isLoading = false,
+                    pokemonList = battlePokemonUseCase(pokemonList, playerPokemon.id)
+                )
+            )
+        }
+    }
+
+    fun enemyAttack() {
+        with(uiState.value) {
+            if (battleEnded || enemyPokemon == null) return
+
+            updateState(
+                uiState.value.copy(
+                    isLoading = false,
+                    pokemonList = battlePokemonUseCase(pokemonList, enemyPokemon.id)
                 )
             )
         }

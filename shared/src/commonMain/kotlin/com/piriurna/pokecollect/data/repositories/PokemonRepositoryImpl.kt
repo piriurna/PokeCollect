@@ -5,6 +5,7 @@ import com.piriurna.pokecollect.data.entity.PokemonDto
 import com.piriurna.pokecollect.data.network.models.PokemonResponse
 import com.piriurna.pokecollect.domain.repositories.PokemonRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Clock
 import kotlin.coroutines.CoroutineContext
 
 class PokemonRepositoryImpl constructor(
@@ -23,12 +24,24 @@ class PokemonRepositoryImpl constructor(
         return pokemonSDK.getOwnedPokemons(coroutineContext)
     }
 
+    override suspend fun getOwnedPokemonsCount(): Int {
+        return pokemonSDK.getOwnedPokemonsCount()
+    }
+
     override suspend fun getPokemon(id: Long): PokemonDto? {
         return pokemonSDK.getPokemon(id)
     }
 
+    override suspend fun getPokemonList(ids: List<Long>): List<PokemonDto?> {
+        return pokemonSDK.getPokemonList(ids)
+    }
+
     override suspend fun getSeenPokemon(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
         return pokemonSDK.getSeenPokemons(coroutineContext)
+    }
+
+    override suspend fun getWildPokemonCount(): Int {
+        return pokemonSDK.getWildPokemonCount()
     }
 
     override suspend fun getRandomWildPokemon(): PokemonDto? {
@@ -48,5 +61,15 @@ class PokemonRepositoryImpl constructor(
 
     override suspend fun catchPokemon(pokemon: PokemonDto) {
         pokemonSDK.updatePokemon(pokemon.copy(owned = 1, seen = 1))
+    }
+
+    override suspend fun updateLastSeenPokemon(id: Long) {
+        val currentTimeMillis = Clock.System.now().epochSeconds
+        val pokemonToUpdate =
+            pokemonSDK.getPokemon(id)?.copy(lastUsedTimestamp = currentTimeMillis)
+
+        pokemonToUpdate?.let {
+            pokemonSDK.updatePokemon(it)
+        }
     }
 }
