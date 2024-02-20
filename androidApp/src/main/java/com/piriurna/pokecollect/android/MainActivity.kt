@@ -7,10 +7,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.piriurna.pokecollect.android.pokemondisplay.PokemonDisplayViewModel
 import com.piriurna.pokecollect.android.ui.PokeCollectNavHost
 import com.piriurna.pokecollect.android.ui.theme.AppTheme
-import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,8 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 PokeCollectNavHost(
-                    navHostController = rememberNavController(),
-                    pokemonDisplayViewModel = koinViewModel<PokemonDisplayViewModel>()
+                    navHostController = rememberNavController()
                 )
             }
         }
@@ -34,7 +31,7 @@ fun GreetingView(text: String) {
 @Preview
 @Composable
 fun DefaultPreview() {
-    MyApplicationTheme {
+    AppTheme {
         GreetingView("Hello, Android!")
     }
 }

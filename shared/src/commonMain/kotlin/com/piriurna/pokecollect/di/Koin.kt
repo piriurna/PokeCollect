@@ -6,8 +6,10 @@ import com.piriurna.pokecollect.domain.repositories.PokemonRepository
 import com.piriurna.pokecollect.domain.usecases.CatchPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.GetNextPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.GetOwnedPokemonsUseCase
+import com.piriurna.pokecollect.domain.usecases.GetPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.GetSeenPokemonUseCase
 import com.piriurna.pokecollect.domain.usecases.SetPokemonAsSeenUseCase
+import com.piriurna.pokecollect.domain.usecases.battle.BattlePokemonUseCase
 import org.koin.dsl.module
 
 fun appModule() = module {
@@ -24,4 +26,8 @@ fun appModule() = module {
     single { CatchPokemonUseCase(get()) }
 
     single { GetSeenPokemonUseCase(get()) }
+
+    single { GetPokemonUseCase(get()) }
+
+    single { BattlePokemonUseCase() }
 }

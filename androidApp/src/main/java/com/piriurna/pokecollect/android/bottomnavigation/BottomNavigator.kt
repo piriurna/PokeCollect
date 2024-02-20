@@ -43,7 +43,7 @@ fun BottomNavigator(
                     .fillMaxHeight()
                     .weight(1f)
                     .clickable { navController.navigate(it.route) }
-                    .background(if(isCurrentRouteSelected) selectedColor else unselectedColor)
+                    .background(if (isCurrentRouteSelected) selectedColor else unselectedColor)
                     .padding(vertical = MaterialTheme.spacing.small),
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally

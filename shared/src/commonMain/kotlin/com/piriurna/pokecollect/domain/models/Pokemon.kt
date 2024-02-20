@@ -11,4 +11,6 @@ data class Pokemon(
     val currentHp: Int,
     val defensePower: Int,
     val attackPower: Int
-)
+) {
+    fun isAlive() = currentHp != 0
+}
