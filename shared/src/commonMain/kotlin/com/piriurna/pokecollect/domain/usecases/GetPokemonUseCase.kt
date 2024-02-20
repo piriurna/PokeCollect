@@ -1,20 +1,18 @@
 package com.piriurna.pokecollect.domain.usecases
 
-import com.piriurna.pokecollect.PokemonSDK
 import com.piriurna.pokecollect.domain.mappers.toDomain
 import com.piriurna.pokecollect.domain.models.Pokemon
-import kotlinx.datetime.Clock
+import com.piriurna.pokecollect.domain.repositories.PokemonRepository
 
 class GetPokemonUseCase constructor(
-    private val pokemonSDK: PokemonSDK
+    private val pokemonRepository: PokemonRepository
 ) {
 
 
-    operator fun invoke(id: Int): Pokemon? {
-        return pokemonSDK.getPokemon(id.toLong())?.let {
+    suspend operator fun invoke(id: Int): Pokemon? {
+        return pokemonRepository.getPokemon(id.toLong())?.let {
             if(it.owned == 1){
-                val currentTimeMillis = Clock.System.now().epochSeconds
-                pokemonSDK.updatePokemon(it.copy(lastUsedTimestamp = currentTimeMillis))
+                pokemonRepository.updateLastSeenPokemon(id.toLong())
             }
 
             return@let it.toDomain()

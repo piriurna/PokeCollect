@@ -19,7 +19,8 @@ import coil.compose.AsyncImage
 import com.piriurna.pokecollect.android.battle.components.HealthBar
 import com.piriurna.pokecollect.android.battle.theme.BattleDimensions.HealthbarHeight
 import com.piriurna.pokecollect.android.battle.theme.BattleDimensions.PokemonImageSize
-import com.piriurna.pokecollect.android.pokedex.navigation.PokedexDestinations
+import com.piriurna.pokecollect.domain.destinations.Destination
+import kotlinx.coroutines.delay
 
 @Composable
 fun BattleScreen(
@@ -28,11 +29,17 @@ fun BattleScreen(
     navController: NavController
 ) {
     val uiState = viewModel.uiState.value
-
+    LaunchedEffect(Unit) {
+        repeat(Int.MAX_VALUE) {
+            delay(500)
+            viewModel.enemyAttack()
+            delay(500)
+        }
+    }
     LaunchedEffect(uiState.battleEnded) {
         if (uiState.battleEnded && uiState.playerPokemon != null && uiState.enemyPokemon != null) {
             viewModel.battleFinished()
-            navController.navigate(PokedexDestinations.PokedexRoute)
+            navController.navigate(Destination.PokedexScreen.route)
         }
     }
 
@@ -63,7 +70,7 @@ fun BattleScreen(
                 )
             }
 
-            Button(onClick = { viewModel.battlePokemons() }) {
+            Button(onClick = { viewModel.playerAttack() }) {
                 Text(text = "Battle")
             }
 

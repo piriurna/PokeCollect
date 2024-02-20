@@ -13,9 +13,15 @@ interface PokemonRepository {
 
     suspend fun getOwnedPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>>
 
+    suspend fun getOwnedPokemonsCount(): Int
+
     suspend fun getPokemon(id: Long): PokemonDto?
 
+    suspend fun getPokemonList(ids: List<Long>): List<PokemonDto?>
+
     suspend fun getSeenPokemon(coroutineContext: CoroutineContext): Flow<List<PokemonDto>>
+
+    suspend fun getWildPokemonCount(): Int
 
     suspend fun getRandomWildPokemon(): PokemonDto?
 
@@ -24,4 +30,6 @@ interface PokemonRepository {
     suspend fun setPokemonAsSeen(id: Long)
 
     suspend fun catchPokemon(pokemon: PokemonDto)
+
+    suspend fun updateLastSeenPokemon(id: Long)
 }

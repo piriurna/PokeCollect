@@ -32,6 +32,7 @@ import com.piriurna.pokecollect.android.pokemondisplay.ui.theme.DisplayScreenDim
 import com.piriurna.pokecollect.android.pokemondisplay.ui.theme.DisplayScreenDimensions.PokemonEncounterFraction
 import com.piriurna.pokecollect.android.ui.theme.AppTheme
 import com.piriurna.pokecollect.android.ui.theme.spacing
+import com.piriurna.pokecollect.domain.destinations.Destination
 import com.piriurna.pokecollect.domain.models.Pokemon
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -50,7 +51,7 @@ fun PokemonDisplayScreen(
         uiState = uiState,
         onNextPokemonLoadClicked = viewModel::getNextPokemon,
         onCatchPokemonPressed = { navController.navigate(
-            "battle/${uiState.ownedPokemonList[pokedexPagerState.currentPage].id}/${uiState.currentPokemon?.id}")
+            "${Destination.BattleScreen.route}/${uiState.ownedPokemonList[pokedexPagerState.currentPage].id}/${uiState.currentPokemon?.id}")
         },
         pagerState = pokedexPagerState
     )
@@ -86,24 +87,25 @@ private fun PokemonDisplayScreenContent(
             )
         }
 
+        if (uiState.currentPokemon != null) {
+            Row(
+                modifier = Modifier.align(Alignment.Center),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = onNextPokemonLoadClicked, colors = ButtonDefaults.buttonColors()) {
+                    Text(text = stringResource(R.string.flee))
+                }
 
-        Row(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(onClick = onNextPokemonLoadClicked, colors = ButtonDefaults.buttonColors()) {
-                Text(text = stringResource(R.string.flee))
-            }
+                Text(
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
+                    text = stringResource(R.string.versus),
+                    style = MaterialTheme.typography.headlineSmall,
+                )
 
-            Text(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
-                text = stringResource(R.string.versus),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-
-            Button(onClick = { onCatchPokemonPressed(uiState.currentPokemon!!) }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)) {
-                Text(text = stringResource(R.string.battle))
+                Button(onClick = { onCatchPokemonPressed(uiState.currentPokemon) }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)) {
+                    Text(text = stringResource(R.string.battle))
+                }
             }
         }
     }

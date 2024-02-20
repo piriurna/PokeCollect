@@ -4,9 +4,12 @@ import com.piriurna.pokecollect.domain.models.Pokemon
 import kotlin.math.max
 
 class BattlePokemonUseCase {
-    operator fun invoke(pokemonList: List<Pokemon>, currentTurn: Int): List<Pokemon> {
-        val attackPokemon = pokemonList[if(currentTurn % 2 == 0) 0 else 1]
-        val defensePokemon = pokemonList[if(currentTurn % 2 == 0) 1 else 0]
+    operator fun invoke(pokemonList: List<Pokemon>, attackingId: Long): List<Pokemon> {
+        val attackPokemon = pokemonList.find { it.id == attackingId }
+        val defensePokemon = pokemonList.find { it.id != attackingId }
+
+        if (attackPokemon == null || defensePokemon == null) return pokemonList
+
         val newDefenseHp = defensePokemon.currentHp - when {
             attackPokemon.attackPower > defensePokemon.defensePower -> attackPokemon.attackPower / 10
             attackPokemon.attackPower == defensePokemon.defensePower -> attackPokemon.attackPower / 20

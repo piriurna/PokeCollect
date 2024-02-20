@@ -19,9 +19,18 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
         return dbQuery.pokemonCount().executeAsOne().toInt()
     }
 
+    internal fun getOwnedPokemonsCount(): Int {
+        return dbQuery.ownedPokemonCount().executeAsOne().toInt()
+    }
+
     internal fun getAllSeenPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
         return dbQuery.selectAllSeenPokemon(::mapPokemonSelecting).asFlow().mapToList(coroutineContext)
     }
+
+    internal fun getWildPokemonCount(): Int {
+        return dbQuery.wildPokemonCount().executeAsOne().toInt()
+    }
+
 
     internal fun getAllOwnedPokemons(coroutineContext: CoroutineContext): Flow<List<PokemonDto>> {
         return dbQuery.selectOwnedPokemon(::mapPokemonSelecting).asFlow().mapToList(coroutineContext)
@@ -33,6 +42,10 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
 
     internal fun getPokemon(id: Long): PokemonDto? {
         return dbQuery.selectPokemon(id, ::mapPokemonSelecting).executeAsOneOrNull()
+    }
+
+    internal fun getPokemonList(ids: List<Long>): List<PokemonDto?> {
+        return dbQuery.selectPokemonList(ids, ::mapPokemonSelecting).executeAsList()
     }
 
     internal fun createPokemons(pokemons: List<PokemonDto>) {
