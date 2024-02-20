@@ -14,8 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.piriurna.pokecollect.android.pokedex.ui.theme.PokedexDimensions.PokedexPokemonImageSize
+import com.piriurna.pokecollect.android.ui.theme.spacing
 import com.piriurna.pokecollect.domain.models.Pokemon
 
 @Composable
@@ -23,7 +24,7 @@ fun PokedexItem(
     modifier: Modifier = Modifier,
     pokemon: Pokemon,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
-    imageSize: Dp = 100.dp
+    imageSize: Dp = PokedexPokemonImageSize
 ) {
     Card(
         modifier = modifier,
@@ -33,7 +34,7 @@ fun PokedexItem(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(4.dp),
+                .padding(MaterialTheme.spacing.small),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

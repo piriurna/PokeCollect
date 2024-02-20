@@ -10,8 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.piriurna.pokecollect.android.pokedex.ui.components.PokedexItem
+import com.piriurna.pokecollect.android.ui.theme.spacing
 
 
 @Composable
@@ -29,9 +29,9 @@ fun PokedexScreen(
         modifier = modifier
             .fillMaxSize(),
         columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        contentPadding = PaddingValues(MaterialTheme.spacing.large),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
     ) {
         items(uiState.pokemonList) {
             PokedexItem(pokemon = it, backgroundColor = MaterialTheme.colorScheme.primary)

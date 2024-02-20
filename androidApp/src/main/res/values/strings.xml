@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="finding_your_next_pokemon">Finding your next Pokemon…</string>
+    <string name="pokemon_image">%1$s image</string>
+    <string name="battle">Battle</string>
+    <string name="flee">Flee</string>
+    <string name="versus">Versus</string>
+</resources>

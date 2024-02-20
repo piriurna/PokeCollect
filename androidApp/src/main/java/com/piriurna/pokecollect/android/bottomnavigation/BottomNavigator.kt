@@ -16,10 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.piriurna.pokecollect.android.bottomnavigation.items.BottomNavigationItem
+import com.piriurna.pokecollect.android.bottomnavigation.ui.theme.BottomNavigatorDimensions.BottomNavigatorHeight
+import com.piriurna.pokecollect.android.ui.theme.spacing
 
 @Composable
 fun BottomNavigator(
@@ -33,7 +34,7 @@ fun BottomNavigator(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(86.dp)
+            .height(BottomNavigatorHeight)
     ) {
         items.forEach {
             val isCurrentRouteSelected = currentRoute?.destination?.route == it.route
@@ -43,7 +44,7 @@ fun BottomNavigator(
                     .weight(1f)
                     .clickable { navController.navigate(it.route) }
                     .background(if(isCurrentRouteSelected) selectedColor else unselectedColor)
-                    .padding(vertical = 4.dp),
+                    .padding(vertical = MaterialTheme.spacing.small),
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

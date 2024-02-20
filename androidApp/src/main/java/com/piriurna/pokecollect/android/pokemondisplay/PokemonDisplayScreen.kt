@@ -22,11 +22,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.piriurna.pokecollect.android.MyApplicationTheme
+import com.piriurna.pokecollect.android.R
 import com.piriurna.pokecollect.android.pokemondisplay.ui.components.BattlePoxedexItem
+import com.piriurna.pokecollect.android.pokemondisplay.ui.theme.DisplayScreenDimensions.PokemonEncounterFraction
+import com.piriurna.pokecollect.android.pokemondisplay.ui.theme.DisplayScreenDimensions.DisplayScreenPokemonImageSize
+import com.piriurna.pokecollect.android.ui.theme.spacing
 import com.piriurna.pokecollect.domain.models.Pokemon
 
 @Composable
@@ -58,7 +62,7 @@ private fun PokemonDisplayScreenContent(
         ) {
             PokemonEncounterContainer(
                 modifier = Modifier
-                    .fillMaxHeight(0.6f)
+                    .fillMaxHeight(PokemonEncounterFraction)
                     .fillMaxWidth(),
                 pokemon = uiState.currentPokemon,
                 isLoading = uiState.isLoading
@@ -78,17 +82,17 @@ private fun PokemonDisplayScreenContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(onClick = onNextPokemonLoadClicked, colors = ButtonDefaults.buttonColors()) {
-                Text(text = "Flee")
+                Text(text = stringResource(R.string.flee))
             }
 
             Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = "Versus",
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
+                text = stringResource(R.string.versus),
                 style = MaterialTheme.typography.headlineSmall,
             )
 
             Button(onClick = { onCatchPokemonPressed(uiState.currentPokemon!!) }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)) {
-                Text(text = "Battle")
+                Text(text = stringResource(R.string.battle))
             }
         }
     }
@@ -107,18 +111,18 @@ private fun PokemonEncounterContainer(
     ) {
         when {
             isLoading -> {
-                Text(text = "Finding your next Pokemon...")
+                Text(text = stringResource(R.string.finding_your_next_pokemon))
             }
             else -> {
                 pokemon?.let {
                     AsyncImage(
-                        modifier = Modifier.size(120.dp),
+                        modifier = Modifier.size(DisplayScreenPokemonImageSize),
                         model = it.imageUrl,
-                        contentDescription = "${it.name} image"
+                        contentDescription = stringResource(R.string.pokemon_image, it.name)
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
                     Text(text = it.name)
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
                 }
             }
         }
