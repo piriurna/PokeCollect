@@ -7,7 +7,8 @@ data class Pokemon(
     val type: String,
     val seen: Boolean,
     val owned: Boolean,
-    val hp: Int,
+    val totalHp: Int,
+    val currentHp: Int,
     val defensePower: Int,
     val attackPower: Int
 )

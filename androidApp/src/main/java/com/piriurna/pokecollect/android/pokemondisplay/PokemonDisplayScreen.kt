@@ -156,7 +156,8 @@ private fun PokemonDisplayScreenPreview() {
                     imageUrl = "",
                     type = "",
                     owned = false,
-                    hp = 0,
+                    currentHp = 0,
+                    totalHp = 0,
                     defensePower = 1,
                     attackPower = 1
                 )

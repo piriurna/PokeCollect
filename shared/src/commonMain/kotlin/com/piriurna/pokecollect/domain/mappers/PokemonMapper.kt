@@ -12,7 +12,8 @@ fun PokemonDto.toDomain(): Pokemon {
         imageUrl = imageUrl,
         seen = seen == 1,
         owned = owned == 1,
-        hp = hp,
+        currentHp = hp,
+        totalHp = hp,
         defensePower = defensePower,
         attackPower = attackPower
     )
@@ -40,7 +41,7 @@ fun Pokemon.toDto(): PokemonDto {
         kind = type,
         seen = if(seen) 1 else 0,
         owned = if (owned) 1 else 0,
-        hp = hp,
+        hp = totalHp,
         defensePower = defensePower,
         attackPower = attackPower
     )
