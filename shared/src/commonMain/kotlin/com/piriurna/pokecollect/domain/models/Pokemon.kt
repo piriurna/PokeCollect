@@ -4,7 +4,7 @@ data class Pokemon(
     val id: Long,
     val name: String,
     val imageUrl: String,
-    val type: String,
+    val type: PokemonType,
     val seen: Boolean,
     val owned: Boolean,
     val totalHp: Int,

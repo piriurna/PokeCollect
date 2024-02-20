@@ -34,6 +34,7 @@ import com.piriurna.pokecollect.android.ui.theme.AppTheme
 import com.piriurna.pokecollect.android.ui.theme.spacing
 import com.piriurna.pokecollect.domain.destinations.Destination
 import com.piriurna.pokecollect.domain.models.Pokemon
+import com.piriurna.pokecollect.domain.models.PokemonType
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -173,7 +174,7 @@ private fun PokemonDisplayScreenPreview() {
                     name = "aa",
                     seen = false,
                     imageUrl = "",
-                    type = "",
+                    type = PokemonType.Unknown,
                     owned = false,
                     currentHp = 0,
                     totalHp = 0,

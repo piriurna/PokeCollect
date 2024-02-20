@@ -31,9 +31,9 @@ fun BattleScreen(
     val uiState = viewModel.uiState.value
     LaunchedEffect(Unit) {
         repeat(Int.MAX_VALUE) {
-            delay(500)
+            delay(250)
             viewModel.enemyAttack()
-            delay(500)
+            delay(250)
         }
     }
     LaunchedEffect(uiState.battleEnded) {
